@@ -16,28 +16,25 @@ export default function ChatIntegration() {
       chatSessionKey: 'sessionId',
       metadata: {},
       showWelcomeScreen: false,
-      defaultLanguage: 'fr',
+      defaultLanguage: 'en', // Nous utilisons 'en' mais avec des messages en français
       initialMessages: [
         'Bonjour ! 👋',
         'Je suis votre assistant virtuel pour les services ministériels togolais. Comment puis-je vous aider aujourd\'hui ?'
       ],
       i18n: {
-        fr: {
+        en: {
           title: 'Services Ministériels Togolais',
           subtitle: "Posez vos questions sur les démarches administratives au Togo",
           footer: '',
           getStarted: 'Nouvelle conversation',
           inputPlaceholder: 'Tapez votre question...',
+          closeButtonTooltip: 'Fermer'
         },
       },
     });
 
-    // Nettoyer lors du démontage du composant
-    return () => {
-      if (chatInstance && typeof chatInstance.destroy === 'function') {
-        chatInstance.destroy();
-      }
-    };
+    // Nous ne pouvons pas nettoyer l'instance de chat car elle n'a pas de méthode destroy
+    // L'instance sera détruite automatiquement lorsque le composant sera démonté
   }, []);
 
   return (

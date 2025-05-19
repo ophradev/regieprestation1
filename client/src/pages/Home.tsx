@@ -7,12 +7,17 @@ import MinisteriesSection from "../components/MinisteriesSection";
 import TestimonialsSection from "../components/TestimonialsSection";
 import CtaSection from "../components/CtaSection";
 import Footer from "../components/Footer";
-import { initializeN8NChat } from "../lib/n8nChat";
+import ChatIntegration, { openChat } from "../components/ChatIntegration";
 
 export default function Home() {
   useEffect(() => {
-    // Initialize N8N Chat
-    initializeN8NChat();
+    // Configurer le bouton de chat flottant
+    const openChatButton = document.getElementById('open-n8n-chat');
+    if (openChatButton) {
+      openChatButton.addEventListener('click', () => {
+        openChat();
+      });
+    }
   }, []);
 
   return (
@@ -27,6 +32,9 @@ export default function Home() {
         <CtaSection />
       </main>
       <Footer />
+      
+      {/* Intégration du Chat N8N */}
+      <ChatIntegration />
       
       {/* Chat Button */}
       <div className="chat-button">
