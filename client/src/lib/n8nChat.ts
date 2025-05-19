@@ -1,44 +1,63 @@
-/**
- * N8N Chat Integration
- * This file manages the integration with n8n chat widget
- */
+declare global {
+  interface Window {
+    n8nChat: any;
+    createChat?: any;
+  }
+}
 
-// This function will dynamically load the N8N Chat library and initialize it
 export function initializeN8NChat() {
-  // Add the N8N Chat stylesheet
-  const styleLink = document.createElement('link');
-  styleLink.rel = 'stylesheet';
-  styleLink.href = 'https://cdn.jsdelivr.net/npm/@n8n/chat/style.css';
-  document.head.appendChild(styleLink);
+  // Vérifier si le chat existe déjà
+  if (window.n8nChat) {
+    return;
+  }
 
-  // Load the N8N Chat script
+  // Si le script est déjà chargé et createChat est disponible
+  if (window.createChat) {
+    initChat();
+    return;
+  }
+
+  // Charger la feuille de style n8n chat si elle n'est pas déjà chargée
+  if (!document.querySelector('link[href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css"]')) {
+    const styleLink = document.createElement('link');
+    styleLink.rel = 'stylesheet';
+    styleLink.href = 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css';
+    document.head.appendChild(styleLink);
+  }
+
+  // Charger le script n8n chat
   const script = document.createElement('script');
-  script.src = 'https://cdn.jsdelivr.net/npm/@n8n/chat/chat.umd.js';
-  script.async = true;
-  script.onload = () => {
-    // Once the script is loaded, initialize the chat
-    if ((window as any).n8nChat && (window as any).n8nChat.createChat) {
-      (window as any).n8nChat.createChat({
-        webhookUrl: import.meta.env.VITE_N8N_WEBHOOK_URL || 'YOUR_PRODUCTION_WEBHOOK_URL',
-        // Add any additional customization options here
-      });
-
-      // Add click event to the chat button to open the chat
-      const chatButton = document.getElementById('open-n8n-chat');
-      if (chatButton) {
-        chatButton.addEventListener('click', () => {
-          try {
-            const chatToggleButton = document.querySelector('.n8n-chat--toggle-button');
-            if (chatToggleButton) {
-              (chatToggleButton as HTMLElement).click();
-            }
-          } catch (error) {
-            console.error('Error opening N8N chat:', error);
-          }
-        });
-      }
-    }
+  script.type = 'text/javascript';
+  script.onload = function() {
+    initChat();
   };
-  
-  document.body.appendChild(script);
+  script.src = 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+  document.head.appendChild(script);
+}
+
+function initChat() {
+  try {
+    if (typeof window.createChat === 'function') {
+      window.n8nChat = window.createChat({
+        webhookUrl: 'YOUR_PRODUCTION_WEBHOOK_URL', // Remplacez par votre URL webhook
+        chatOptions: {
+          theme: {
+            primaryColor: '#006B3F',
+            secondaryColor: '#FFCE00',
+            fontFamily: 'Poppins, sans-serif'
+          },
+          messages: {
+            welcomeMessage: 'Bonjour ! Je suis votre assistant virtuel pour les prestations des ministères togolais. Comment puis-je vous aider aujourd\'hui ?'
+          },
+          chatPosition: 'right',
+          chatWindow: {
+            title: 'Assistant Virtuel des Services Ministériels',
+            showCloseButton: true
+          }
+        }
+      });
+    }
+  } catch (error) {
+    console.error('Erreur lors de l\'initialisation du chat n8n:', error);
+  }
 }

@@ -1,13 +1,13 @@
 import { useEffect } from "react";
-import Header from "@/components/Header";
-import HeroSection from "@/components/HeroSection";
-import FeaturesSection from "@/components/FeaturesSection";
-import AIAssistantSection from "@/components/AIAssistantSection";
-import MinisteriesSection from "@/components/MinisteriesSection";
-import TestimonialsSection from "@/components/TestimonialsSection";
-import CtaSection from "@/components/CtaSection";
-import Footer from "@/components/Footer";
-import { initializeN8NChat } from "@/lib/n8nChat";
+import Header from "../components/Header";
+import HeroSection from "../components/HeroSection";
+import FeaturesSection from "../components/FeaturesSection";
+import AIAssistantSection from "../components/AIAssistantSection";
+import MinisteriesSection from "../components/MinisteriesSection";
+import TestimonialsSection from "../components/TestimonialsSection";
+import CtaSection from "../components/CtaSection";
+import Footer from "../components/Footer";
+import { initializeN8NChat } from "../lib/n8nChat";
 
 export default function Home() {
   useEffect(() => {

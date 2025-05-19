@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <g>
+    <!-- Bouclier -->
+    <path d="M100,10 C50,10 20,40 20,100 C20,160 60,190 100,190 C140,190 180,160 180,100 C180,40 150,10 100,10 Z" fill="#006b3f" stroke="#fff" stroke-width="4"/>
+    
+    <!-- Drapeau togolais dans le bouclier -->
+    <rect x="40" y="30" width="120" height="120" fill="#006b3f"/>
+    <rect x="40" y="30" width="120" height="24" fill="#ffce00"/>
+    <rect x="40" y="54" width="120" height="24" fill="#006b3f"/>
+    <rect x="40" y="78" width="120" height="24" fill="#ffce00"/>
+    <rect x="40" y="102" width="120" height="24" fill="#006b3f"/>
+    <rect x="40" y="126" width="120" height="24" fill="#ffce00"/>
+    
+    <!-- Étoile sur le drapeau -->
+    <rect x="40" y="30" width="60" height="72" fill="#d21034"/>
+    <polygon points="70,40 77,62 95,62 80,75 87,97 70,84 53,97 60,75 45,62 63,62" fill="white"/>
+    
+    <!-- Colonne stylisée -->
+    <rect x="85" y="70" width="30" height="70" fill="#ffffff" opacity="0.8"/>
+    <rect x="80" y="60" width="40" height="10" fill="#ffffff" opacity="0.8"/>
+    <rect x="75" y="50" width="50" height="10" fill="#ffffff" opacity="0.8"/>
+  </g>
+</svg>
