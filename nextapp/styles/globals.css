@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #006B3F;
+  --secondary: #FFCE00;
+  --tertiary: #D21034;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply font-sans text-gray-800 bg-white;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-poppins font-bold;
+  }
+}
+
+@layer components {
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .btn-primary {
+    @apply bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors duration-300 inline-flex items-center;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary text-togo-dark px-6 py-3 rounded-lg font-medium hover:bg-secondary/90 transition-colors duration-300 inline-flex items-center;
+  }
+  
+  .btn-outline {
+    @apply bg-transparent border-2 border-white px-6 py-3 rounded-lg font-medium hover:bg-white hover:text-primary transition-colors duration-300 inline-flex items-center;
+  }
+  
+  .chat-button {
+    @apply fixed bottom-8 right-8 z-50;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary to-tertiary text-transparent bg-clip-text;
+  }
+}
