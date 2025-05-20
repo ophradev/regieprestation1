@@ -16,6 +16,13 @@ interface QuickReply {
   action: () => void;
 }
 
+interface N8nResponse {
+  text: string;
+  options?: string[];
+  quickReplies?: string[];
+  attachments?: { type: 'image' | 'link'; url: string; title?: string }[];
+}
+
 export default function SimpleChatBot() {
   const [isVisible, setIsVisible] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -28,19 +35,45 @@ export default function SimpleChatBot() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   
+  // URL du webhook n8n
+  const webhookUrl = "https://wimose.app.n8n.cloud/webhook/e16ea94b-0dd2-47d5-94fe-474b03e930b3/chat";
+  
   // Pour faire défiler automatiquement vers le dernier message
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, []);
   
-  // Gestion du thème
+  // Gestion du thème global du site
   useEffect(() => {
     // Détection du thème préféré de l'utilisateur
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     setIsDarkMode(prefersDark);
     
-    // Appliquer le thème au document
+    // Appliquer le thème au document entier
     document.documentElement.classList.toggle('dark', isDarkMode);
+    
+    // Appliquer le thème sombre à tout le site
+    if (isDarkMode) {
+      document.body.classList.add('bg-gray-900', 'text-white');
+      document.querySelectorAll('section').forEach((section) => {
+        if (section.id !== 'accueil') {
+          section.classList.add('bg-gray-800');
+          section.classList.remove('bg-white', 'bg-gray-50');
+        }
+      });
+    } else {
+      document.body.classList.remove('bg-gray-900', 'text-white');
+      document.querySelectorAll('section').forEach((section) => {
+        if (section.id !== 'accueil') {
+          section.classList.remove('bg-gray-800');
+          if (section.id % 2 === 0) {
+            section.classList.add('bg-white');
+          } else {
+            section.classList.add('bg-gray-50');
+          }
+        }
+      });
+    }
   }, [isDarkMode]);
   
   // Faire défiler automatiquement vers le dernier message
@@ -95,6 +128,12 @@ export default function SimpleChatBot() {
       }, 500);
     }, 1500);
     
+    // Enlever l'ancien bouton de chat n8n si existant
+    const oldChatButton = document.querySelector('.n8n-chat-window-button');
+    if (oldChatButton) {
+      oldChatButton.remove();
+    }
+    
     // Ajouter un gestionnaire d'événements pour les boutons de chat
     const handleChatButtonClick = () => {
       setIsVisible(true);
@@ -117,8 +156,52 @@ export default function SimpleChatBot() {
     };
   }, []);
   
-  // Fonction pour envoyer un message
-  const sendMessage = useCallback((text = inputValue) => {
+  // Fonction pour envoyer un message au webhook n8n et recevoir une réponse
+  const fetchFromN8n = async (message: string): Promise<N8nResponse> => {
+    try {
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: message,
+          sessionId: localStorage.getItem('chatSessionId') || generateId()
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP: ${response.status}`);
+      }
+      
+      // Stocker l'ID de session si c'est une nouvelle conversation
+      if (!localStorage.getItem('chatSessionId')) {
+        localStorage.setItem('chatSessionId', generateId());
+      }
+      
+      const data = await response.json();
+      console.log('Réponse n8n:', data);
+      
+      // Traiter la réponse du webhook
+      return {
+        text: data.text || "Désolé, je n'ai pas pu comprendre votre demande.",
+        options: data.options || [],
+        quickReplies: data.quickReplies || [],
+        attachments: data.attachments || []
+      };
+    } catch (error) {
+      console.error('Erreur lors de la communication avec n8n:', error);
+      
+      // Réponse par défaut en cas d'erreur
+      return {
+        text: "Je rencontre des difficultés pour communiquer avec mes services. Voici quelques informations générales sur le Ministère de la Santé:\n\nLe Ministère de la Santé du Togo est responsable de la définition et de la mise en œuvre de la politique sanitaire nationale. Il gère les hôpitaux publics, les campagnes de vaccination, les politiques de prévention et l'accès aux soins de santé pour la population.",
+        options: ['Autres ministères', 'Hôpitaux principaux', 'Vaccination']
+      };
+    }
+  };
+  
+  // Fonction pour envoyer un message au bot
+  const sendMessage = useCallback(async (text = inputValue) => {
     if (!text.trim()) return;
     
     // Cacher les quick replies après envoi d'un message
@@ -147,15 +230,26 @@ export default function SimpleChatBot() {
     
     setMessages(prev => [...prev, typingMessage]);
     
-    // Simuler le temps de réflexion du bot (plus long pour les réponses complexes)
-    const delay = text.length > 20 ? 2000 : 1000;
-    setTimeout(() => {
+    try {
+      // Tester avec une requête spécifique sur le ministère de la santé
+      let botResponse;
+      
+      if (text.toLowerCase().includes('ministère de la santé') || text.toLowerCase() === 'que fais le ministere de la santé') {
+        // Simuler un petit délai pour montrer l'animation de typing
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // Appeler le webhook n8n
+        botResponse = await fetchFromN8n(text);
+      } else {
+        // Obtenir la réponse du chatbot local pour les autres requêtes
+        botResponse = await getLocalBotResponse(text);
+      }
+      
       // Supprimer le message "typing"
       setMessages(prev => prev.filter(msg => !msg.isTyping));
       setIsTyping(false);
       
-      // Obtenir et ajouter la réponse du bot
-      const botResponse = getBotResponse(text);
+      // Ajouter la réponse du bot
       const botMessage: Message = {
         id: generateId(),
         text: botResponse.text,
@@ -175,11 +269,30 @@ export default function SimpleChatBot() {
         }));
         setQuickReplies(replies);
       }
-    }, delay);
+    } catch (error) {
+      console.error('Erreur lors de l\'envoi du message:', error);
+      
+      // Supprimer le message "typing"
+      setMessages(prev => prev.filter(msg => !msg.isTyping));
+      setIsTyping(false);
+      
+      // Ajouter un message d'erreur
+      const errorMessage: Message = {
+        id: generateId(),
+        text: "Je suis désolé, mais j'ai rencontré un problème technique. Veuillez réessayer plus tard.",
+        sender: 'bot',
+        timestamp: new Date()
+      };
+      
+      setMessages(prev => [...prev, errorMessage]);
+    }
   }, [inputValue]);
   
-  // Fonction pour obtenir une réponse du bot basée sur le message de l'utilisateur
-  const getBotResponse = (userMessage: string) => {
+  // Fonction pour obtenir une réponse locale du bot (sans appel API)
+  const getLocalBotResponse = async (userMessage: string): Promise<N8nResponse> => {
+    // Simuler un délai réseau
+    await new Promise(resolve => setTimeout(resolve, userMessage.length > 20 ? 2000 : 1000));
+    
     const lowerCaseMessage = userMessage.toLowerCase();
     
     // Réponses basiques
