@@ -7,7 +7,7 @@ import MinisteriesSection from "../components/MinisteriesSection";
 import TestimonialsSection from "../components/TestimonialsSection";
 import CtaSection from "../components/CtaSection";
 import Footer from "../components/Footer";
-import SimpleChatBot from "../components/SimpleChatBot";
+import ChatBot from "../components/ChatBot";
 
 export default function Home() {
   return (
@@ -23,8 +23,8 @@ export default function Home() {
       </main>
       <Footer />
       
-      {/* Intégration du Chat personnalisé */}
-      <SimpleChatBot />
+      {/* Chatbot pour les informations sur les services ministériels */}
+      <ChatBot />
     </div>
   );
 }
