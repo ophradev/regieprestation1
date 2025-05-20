@@ -6,7 +6,7 @@ export default function ChatIntegration() {
   useEffect(() => {
     // Créer l'instance du chat lors du chargement du composant
     const chatInstance = createChat({
-      webhookUrl: '', // À remplacer par votre URL webhook
+      webhookUrl: 'https://wimose.app.n8n.cloud/webhook/e16ea94b-0dd2-47d5-94fe-474b03e930b3/chat', // À remplacer par votre URL webhook
       webhookConfig: {
         method: 'POST',
         headers: {}
