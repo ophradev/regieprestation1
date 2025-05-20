@@ -10,11 +10,19 @@ export default function ChatBot() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // Scrolling to bottom when new messages are added
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  // Focus input when chat opens
+  useEffect(() => {
+    if (isOpen && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isOpen]);
 
   // Initialize chat with welcome message
   useEffect(() => {
@@ -30,7 +38,7 @@ export default function ChatBot() {
       setIsOpen(true);
     };
     
-    const chatButtons = document.querySelectorAll('#hero-chat-button, #open-n8n-chat');
+    const chatButtons = document.querySelectorAll('#hero-chat-button');
     chatButtons.forEach(button => {
       button.addEventListener('click', handleChatButtonClick);
     });
@@ -99,10 +107,12 @@ export default function ChatBot() {
         <div className="fixed bottom-8 right-8 z-50">
           <button
             onClick={() => setIsOpen(true)}
-            className="bg-primary text-white rounded-full p-4 shadow-lg hover:bg-primary/90 transition-all duration-300 flex items-center justify-center animate-pulse"
+            className="bg-primary text-white rounded-full w-16 h-16 shadow-lg hover:bg-primary/90 transition-all duration-300 flex items-center justify-center animate-pulse"
             aria-label="Ouvrir le chat"
           >
-            <i className="fas fa-comments text-2xl"></i>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+            </svg>
           </button>
         </div>
       )}
@@ -168,6 +178,7 @@ export default function ChatBot() {
               className="flex items-center"
             >
               <input
+                ref={inputRef}
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}

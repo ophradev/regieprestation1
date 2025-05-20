@@ -21,61 +21,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
-    <!-- n8n Chat Styles -->
-    <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
   </head>
   <body>
     <div id="root"></div>
-    <div id="n8n-chat"></div>
-    
     <script type="module" src="/src/main.tsx"></script>
     <!-- This is a replit script which adds a banner on the top of the page when opened in development mode outside the replit environment -->
     <script type="text/javascript" src="https://replit.com/public/js/replit-dev-banner.js"></script>
-    
-    <!-- n8n Chat Script -->
-    <script type="module">
-      import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
-      
-      // Configuration du chat n8n
-      document.addEventListener('DOMContentLoaded', function() {
-        createChat({
-          webhookUrl: '',
-          webhookConfig: {
-            method: 'POST',
-            headers: {}
-          },
-          target: '#n8n-chat',
-          mode: 'window',
-          chatInputKey: 'chatInput',
-          chatSessionKey: 'sessionId',
-          metadata: {},
-          showWelcomeScreen: false,
-          defaultLanguage: 'en',
-          initialMessages: [
-            'Bonjour ! 👋',
-            'Je suis votre assistant virtuel pour les services ministériels togolais. Comment puis-je vous aider aujourd\'hui ?'
-          ],
-          i18n: {
-            en: {
-              title: 'Services Ministériels Togolais',
-              subtitle: "Posez vos questions sur les démarches administratives au Togo",
-              footer: '',
-              getStarted: 'Nouvelle Conversation',
-              inputPlaceholder: 'Tapez votre question...',
-            },
-          },
-        });
-        
-        // Ouvrir automatiquement le chat lorsqu'on clique sur le bouton
-        document.addEventListener('click', function(e) {
-          if (e.target.closest('#open-n8n-chat') || e.target.closest('#hero-chat-button')) {
-            const chatButton = document.querySelector('.n8n-chat-window-button');
-            if (chatButton) {
-              chatButton.click();
-            }
-          }
-        });
-      });
-    </script>
   </body>
 </html>

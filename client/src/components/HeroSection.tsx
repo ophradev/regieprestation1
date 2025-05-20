@@ -1,15 +1,8 @@
 import { useEffect } from 'react';
-import { initializeN8NChat } from '../lib/n8nChat';
 
 export default function HeroSection() {
   useEffect(() => {
-    // Initialiser le chat n8n lorsque le composant est monté
-    const chatButton = document.getElementById('hero-chat-button');
-    if (chatButton) {
-      chatButton.addEventListener('click', () => {
-        initializeN8NChat();
-      });
-    }
+    // Aucune initialisation spéciale nécessaire, le chatbot est maintenant géré par le composant ChatBot.tsx
   }, []);
 
   return (
