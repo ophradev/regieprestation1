@@ -124,7 +124,9 @@ export default function ChatBot() {
           <div className="bg-primary p-4 flex justify-between items-center">
             <div className="flex items-center">
               <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center mr-3">
-                <i className="fas fa-robot text-primary"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                </svg>
               </div>
               <div>
                 <h3 className="font-bold text-white">Assistant e-Services</h3>
@@ -135,7 +137,9 @@ export default function ChatBot() {
               onClick={() => setIsOpen(false)}
               className="text-white hover:text-gray-200"
             >
-              <i className="fas fa-times"></i>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
             </button>
           </div>
 
@@ -156,7 +160,9 @@ export default function ChatBot() {
                   {!msg.isUser && (
                     <div className="flex items-center mb-1">
                       <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center mr-2">
-                        <i className="fas fa-robot text-white text-xs"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                        </svg>
                       </div>
                       <span className="text-xs font-medium text-gray-700">Assistant</span>
                     </div>
@@ -189,7 +195,9 @@ export default function ChatBot() {
                 type="submit"
                 className="bg-primary text-white p-2 rounded-r-md hover:bg-primary/90"
               >
-                <i className="fas fa-paper-plane"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
               </button>
             </form>
           </div>
